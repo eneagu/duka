@@ -47,6 +47,7 @@ class CSVDumper:
         self.folder = folder
         self.include_header = header
         self.buffer = {}
+        self.fwrite = write_tick if self.timeframe == TimeFrame.TICK else write_candle
 
     def get_header(self):
         if self.timeframe == TimeFrame.TICK:
@@ -88,9 +89,6 @@ class CSVDumper:
                 writer.writeheader()
             for day in sorted(self.buffer.keys()):
                 for value in self.buffer[day]:
-                    if self.timeframe == TimeFrame.TICK:
-                        write_tick(writer, value)
-                    else:
-                        write_candle(writer, value)
+                    self.fwrite(writer, value)
 
         Logger.info("{0} completed".format(file_name))
