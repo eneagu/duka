@@ -58,10 +58,11 @@ class CSVDumper:
         previous_key = None
         current_ticks = []
         self.buffer[day] = []
-        for tick in ticks:
-            if self.timeframe == TimeFrame.TICK:
+        if self.timeframe == TimeFrame.TICK:
+            for tick in ticks:
                 self.buffer[day].append(tick)
-            else:
+        else:
+            for tick in ticks:
                 ts = time.mktime(tick[0].timetuple())
                 key = int(ts - (ts % self.timeframe))
                 if previous_key != key and previous_key is not None:
